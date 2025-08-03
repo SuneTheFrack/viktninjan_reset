@@ -3,11 +3,15 @@ from logg_router import logg_allt
 from viktlogg import logg_vikt
 from rorelselogg import logg_rorelse
 
+print("✅ Flask och imports klara")  # <--- Lägg till
+
 app = Flask(__name__)
 
 @app.route('/')
 def home():
     return "ViktNinjan är igång!", 200
+    
+print("✅ Flask-app initierad")  # <--- Lägg till
 
 # Knyt alla logg-endpoints
 app.add_url_rule("/logg", view_func=logg_allt, methods=["POST"])

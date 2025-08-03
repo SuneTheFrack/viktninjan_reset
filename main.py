@@ -18,7 +18,10 @@ app.add_url_rule("/logg", view_func=logg_allt, methods=["POST"])
 print("✅ /logg är registrerad")
 
 app.add_url_rule("/loggvikt", view_func=logg_vikt, methods=["POST"])
+print("✅ /loggvikt registrerad")  # <--- Lägg till
 app.add_url_rule("/loggrorelse", view_func=logg_rorelse, methods=["POST"])
+print("✅ /loggrorelse registrerad")  # <--- Lägg till
 
 if __name__ == "__main__":
+    print("🚀 Startar Flask-server...")  # <--- Lägg till
     app.run(host="0.0.0.0", port=8000)

@@ -1,5 +1,6 @@
 from flask import Flask
 from logg_router import logg_allt
+from routes.logg_get import las_loggar
 from viktlogg import logg_vikt
 from rorelselogg import logg_rorelse
 
@@ -19,8 +20,12 @@ print("✅ /logg är registrerad")
 
 app.add_url_rule("/loggvikt", view_func=logg_vikt, methods=["POST"])
 print("✅ /loggvikt registrerad")  # <--- Lägg till
+
 app.add_url_rule("/loggrorelse", view_func=logg_rorelse, methods=["POST"])
 print("✅ /loggrorelse registrerad")  # <--- Lägg till
+
+app.add_url_rule("/logg", view_func=las_loggar, methods=["GET"])
+print("✅ /logg (GET) registrerad")
 
 if __name__ == "__main__":
     print("🚀 Startar Flask-server...")  # <--- Lägg till

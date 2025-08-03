@@ -21,7 +21,13 @@ def skriv_till_sheet(rad, blad_namn="Logg"):
     blad.append_row(rad)
 
 # == läs från sheet ==
-def hamta_loggar(blad_namn="Logg", person=None, datum=None):
+def hamta_loggar(person=None, datum=None, typ="mat"):
+    blad_namn = {
+        "mat": "mat",
+        "rorelse": "rorelse",
+        "vikt": "vikt"
+    }.get(typ, "mat")  # standard: mat
+
     creds_dict = json.loads(os.environ["SERVICE_ACCOUNT_JSON"])
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
     client = gspread.authorize(creds)

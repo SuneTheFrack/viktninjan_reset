@@ -8,7 +8,9 @@ def skriv_till_sheet(rad, blad_namn="Logg"):
         "https://www.googleapis.com/auth/drive"
     ]
     
-    creds_dict = eval(os.environ["SERVICE_ACCOUNT_JSON"])
+    import json  # lägg detta högst upp om det inte finns
+    creds_dict = json.loads(os.environ["SERVICE_ACCOUNT_JSON"])
+
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
     client = gspread.authorize(creds)
 

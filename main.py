@@ -3,6 +3,7 @@ from logg_router import logg_allt
 from routes.logg_get import las_loggar
 from viktlogg import logg_vikt
 from rorelselogg import logg_rorelse
+from routes.preferenser import las_preferenser
 
 print("✅ Flask och imports klara")  # <--- Lägg till
 
@@ -26,6 +27,11 @@ print("✅ /loggrorelse registrerad")  # <--- Lägg till
 
 app.add_url_rule("/logg", view_func=las_loggar, methods=["GET"])
 print("✅ /logg (GET) registrerad")
+
+
+app.add_url_rule("/preferenser", view_func=las_preferenser, methods=["GET"])
+print("✅ /preferenser (GET) registrerad")
+
 
 if __name__ == "__main__":
     print("🚀 Startar Flask-server...")  # <--- Lägg till

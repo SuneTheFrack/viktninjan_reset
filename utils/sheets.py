@@ -20,7 +20,7 @@ def skriv_till_sheet(rad, blad_namn="Logg"):
     blad = spreadsheet.worksheet(blad_namn)
     blad.append_row(rad)
 
-# == läs från sheet ==
+# == läs loggar från sheet ==
 def hamta_loggar(person=None, datum=None, typ="mat"):
     blad_namn = {
         "mat": "Mat",
@@ -44,3 +44,17 @@ def hamta_loggar(person=None, datum=None, typ="mat"):
         filtrerade.append(rad)
 
     return filtrerade
+
+# == läs preferenser från sheet ==
+def hamta_preferenser(person):
+    creds_dict = json.loads(os.environ["SERVICE_ACCOUNT_JSON"])
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+    client = gspread.authorize(creds)
+    spreadsheet = client.open_by_key(os.environ["SHEET_ID"])
+    blad = spreadsheet.worksheet("Preferenser")
+    rader = blad.get_all_records()
+
+    for rad in rader:
+        if rad["person"].lower() == person.lower():
+            return rad
+    return None

@@ -26,7 +26,7 @@ def hamta_loggar(person=None, datum=None, typ="mat"):
         "mat": "Mat",
         "rorelse": "Rorelse",
         "vikt": "Vikt"
-    }.get(typ, "Mat")  # standard: mat
+    }.get(typ.lower(), "Mat")  # fix: .lower() för att undvika versalproblem
 
     creds_dict = json.loads(os.environ["SERVICE_ACCOUNT_JSON"])
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)

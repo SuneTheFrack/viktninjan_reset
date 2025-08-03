@@ -23,10 +23,10 @@ def skriv_till_sheet(rad, blad_namn="Logg"):
 # == läs från sheet ==
 def hamta_loggar(person=None, datum=None, typ="mat"):
     blad_namn = {
-        "mat": "mat",
-        "rorelse": "rorelse",
-        "vikt": "vikt"
-    }.get(typ, "mat")  # standard: mat
+        "mat": "Mat",
+        "rorelse": "Rorelse",
+        "vikt": "Vikt"
+    }.get(typ, "Mat")  # standard: mat
 
     creds_dict = json.loads(os.environ["SERVICE_ACCOUNT_JSON"])
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
@@ -37,9 +37,9 @@ def hamta_loggar(person=None, datum=None, typ="mat"):
 
     filtrerade = []
     for rad in rader:
-        if person and rad["person"].lower() != person.lower():
+        if person and rad["Person"].lower() != person.lower():
             continue
-        if datum and rad["datum"] != datum:
+        if datum and rad["Datum"] != datum:
             continue
         filtrerade.append(rad)
 

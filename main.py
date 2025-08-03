@@ -11,6 +11,8 @@ def home():
 
 # Knyt alla logg-endpoints
 app.add_url_rule("/logg", view_func=logg_allt, methods=["POST"])
+print("✅ /logg är registrerad")
+
 app.add_url_rule("/loggvikt", view_func=logg_vikt, methods=["POST"])
 app.add_url_rule("/loggrorelse", view_func=logg_rorelse, methods=["POST"])
 

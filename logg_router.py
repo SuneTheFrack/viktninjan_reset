@@ -5,6 +5,8 @@ from matlogg import logg_maltid_intern
 
 def logg_allt():
     data = request.get_json()
+    print("📥 /logg kallad")
+    print("📦 JSON från GPT:", data)
 
     if not data:
         return {"status": "error", "message": "Ingen data mottagen"}, 400

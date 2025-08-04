@@ -51,7 +51,7 @@ def hamta_preferenser(person):
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
     client = gspread.authorize(creds)
     spreadsheet = client.open_by_key(os.environ["SHEET_ID"])
-    blad = spreadsheet.worksheet("Preferenser")
+    blad = spreadsheet.worksheet("preferenser")
     rader = blad.get_all_records()
 
     for rad in rader:

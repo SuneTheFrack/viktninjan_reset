@@ -2,8 +2,8 @@
 # Tar emot rörelsedata och loggar det till fliken "Rorelse" i Google Sheets
 
 from flask import request, jsonify
-from auth import sheet
 from tidutils import get_datum_tid
+from utils.sheets import skriv_till_sheet
 
 def logg_rorelse():
     data = request.json
@@ -11,14 +11,18 @@ def logg_rorelse():
     # Hämtar datum och tid, inklusive stöd för "nu"
     datum, tid = get_datum_tid(data)
 
-    row = [
-        datum,
-        tid,
-        data.get("person", ""),
-        data.get("steg", ""),
-        data.get("rorelsetid_min", ""),
-        data.get("kalorier", "")
-    ]
+    rad = {
+        "datum": datum,
+        "tid": tid,
+        "person": data.get("person"),
+        "steg": data.get("steg", ""),
+        "rorelsetid_min": data.get("rorelsetid_min", ""),
+        "kalorier": data.get("kalorier", "")
+    }
 
-    sheet.worksheet("Rorelse").append_row(row)
-    return jsonify({"status": "OK", "rad": row}), 200
+    skriv_till_sheet(rad, blad_namn="rorelse")
+
+    return jsonify({
+        "status": "ok",
+        "message": f"🏃 Rörelse loggad för {rad['person']}"
+    }), 200

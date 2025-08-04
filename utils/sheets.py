@@ -58,3 +58,15 @@ def hamta_preferenser(person):
         if rad["person"].lower() == person.lower():
             return rad
     return None
+
+def hamta_kolumnnamn(blad_namn):
+    creds_dict = json.loads(os.environ["SERVICE_ACCOUNT_JSON"])
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+    client = gspread.authorize(creds)
+
+    sheet_id = os.environ["SHEET_ID"]
+    spreadsheet = client.open_by_key(sheet_id)
+    blad = spreadsheet.worksheet(blad_namn)
+
+    kolumnnamn = blad.row_values(1)  # Första raden antas vara header
+    return [k.lower() for k in kolumnnamn]  # Små bokstäver för jämnhet

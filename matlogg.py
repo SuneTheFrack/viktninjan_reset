@@ -15,7 +15,7 @@ def logg_maltid_intern(data):
         "person": person,
         "mal": data.get("mal", ""),
         "innehall": data.get("innehall", ""),
-        "kcal": data.get("kcal", 0),
+        "kalorier": data.get("kcal", 0),
         "protein": data.get("protein", 0),
         "fett": data.get("fett", 0),
         "mattat_fett": data.get("mattat_fett", 0),

@@ -1,4 +1,5 @@
 from flask import jsonify
+from utils.tid import get_datum_tid
 
 def logg_maltid_intern(data):
     datum, tid = get_datum_tid(data)

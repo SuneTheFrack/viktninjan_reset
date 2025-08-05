@@ -8,16 +8,13 @@ def logg_allt():
     print("📥 /logg kallad")
     print("📦 JSON från GPT:", data)
 
-    if not data:
-        return {"status": "error", "message": "Ingen data mottagen"}, 400
-
-    # 🧠 Är det en viktlogg?
     if "vikt" in data and data["vikt"]:
+        print("📌 Det är en viktlogg")
         return logg_vikt()
 
-    # 🧠 Är det en rörelselogg?
     if "aktivitet" in data or "steg" in data or "minuter" in data:
+        print("📌 Det är en rörelselogg")
         return logg_rorelse()
 
-    # 🧠 Annars – vi antar att det är mat eller vätska
+    print("📌 Det är en matlogg – skickar till logg_maltid_intern")
     return logg_maltid_intern(data)

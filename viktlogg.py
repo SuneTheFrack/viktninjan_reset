@@ -17,7 +17,7 @@ def logg_vikt():
     rad = [datum, tid, person, vikt]
 
     # 📝 Viktigt: blad_namn = "Vikt" (inte "Viktlogg" som tidigare!)
-    skriv_till_sheet(rad, blad_namn="Vikt")
+    skriv_till_sheet(rad, blad_namn="vikt")
 
     return jsonify({
         "status": "ok",

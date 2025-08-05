@@ -2,7 +2,7 @@
 # Tar emot rörelsedata och loggar det till fliken "Rorelse" i Google Sheets
 
 from flask import request, jsonify
-from tidutils import get_datum_tid
+from utils/tid import get_datum_tid
 from utils.sheets import skriv_till_sheet
 
 def logg_rorelse():

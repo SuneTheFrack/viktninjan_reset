@@ -32,7 +32,7 @@ def logg_maltid_intern(data):
         "message": f"✅ Mat loggad för {person} kl. {tid}"
     }), 200
 
-    skriv_till_sheet(rad, blad_namn="Mat")
+    skriv_till_sheet(rad, blad_namn="mat")
 
     return jsonify({
         "status": "ok",

@@ -1,6 +1,6 @@
 from flask import Flask
 from logg_router import logg_allt
-from routes.logg_get import las_loggar, veckosammanstallning
+from routes.logg_get import las_loggar
 from viktlogg import logg_vikt
 from rorelselogg import logg_rorelse
 from routes.preferenser import las_preferenser
@@ -26,9 +26,6 @@ print("✅ /loggvikt registrerad")
 app.add_url_rule("/loggrorelse", view_func=logg_rorelse, methods=["POST"])
 print("✅ /loggrorelse registrerad")
 
-# GET /veckosammanstallning → veckosammanställning
-app.add_url_rule("/veckosammanstallning", view_func=veckosammanstallning, methods=["GET"])
-print("✅ /veckosammanstallning (GET) registrerad")
 
 # GET /preferenser → hämta preferenser
 app.add_url_rule("/preferenser", view_func=las_preferenser, methods=["GET"])

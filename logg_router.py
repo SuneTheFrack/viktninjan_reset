@@ -8,9 +8,11 @@ def logg_allt():
     print("📥 /logg kallad")
     print("📦 JSON från GPT:", data)
 
-    if "vikt" in data and data["vikt"]:
-        print("📌 Det är en viktlogg")
-        return logg_vikt()
+    vikt = data.get("vikt")
+    if isinstance(vikt, (int, float)) and vikt > 0:
+    print("📌 Det är en viktlogg")
+    return logg_vikt()
+
 
     if "aktivitet" in data or "steg" in data or "minuter" in data:
         print("📌 Det är en rörelselogg")

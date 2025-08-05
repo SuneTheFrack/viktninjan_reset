@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from utils.sheets import hamta_loggar
+from utils.sheets import hamta_loggar, hamta_preferenser
 
 def las_loggar():
     """

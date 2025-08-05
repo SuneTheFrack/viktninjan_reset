@@ -1,5 +1,5 @@
 from flask import request, jsonify
-import datetime
+from utils.tid import get_datum_tid
 from utils.sheets import skriv_till_sheet  # För att skriva till Google Sheet
 
 def logg_vikt():

@@ -1,4 +1,5 @@
 from flask import jsonify
+from utils.sheets import skriv_till_sheet
 from utils.tid import get_datum_tid
 
 def logg_maltid_intern(data):

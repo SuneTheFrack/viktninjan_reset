@@ -1,25 +1,43 @@
 from flask import request, jsonify
 from utils.tid import get_datum_tid
-from utils.sheets import skriv_till_sheet  # För att skriva till Google Sheet
+from utils.sheets import skriv_till_sheet
 
 def logg_vikt():
     data = request.get_json()
+    print("📥 logg_vikt körs")
+    print("📦 JSON från GPT:", data)
 
-    if not data or "vikt" not in data:
-        return jsonify({"status": "error", "message": "Ingen vikt angiven"}), 400
+    # Hämta datum och tid (inklusive "nu")
+    datum, tid = get_datum_tid(data)
 
-    vikt = data["vikt"]
-    datum = data.get("datum") or datetime.date.today().isoformat()
-    tid = data.get("tid") or datetime.datetime.now().strftime("%H:%M")
-    person = data.get("person", "Henrik")
+    # Validera person
+    person = data.get("person", "")
+    if not person:
+        return jsonify({"status": "error", "message": "Person saknas"}), 400
 
-    # Bygg raden som ska skrivas in i Google Sheet-bladet "Vikt"
-    rad = [datum, tid, person, vikt]
+    # Validera vikt
+    vikt = data.get("vikt")
+    if vikt is None:
+        return jsonify({"status": "error", "message": "Vikt saknas"}), 400
 
-    # 📝 Viktigt: blad_namn = "Vikt" (inte "Viktlogg" som tidigare!)
+    # Bygg upp raden
+    rad = {
+        "datum": datum,
+        "tid": tid,
+        "person": person,
+        "vikt": vikt,
+        "muskelvikt": data.get("muskelvikt", 0),
+        "fettprocent": data.get("fettprocent", 0),
+        "vattenprocent": data.get("vattenprocent", 0),
+        "bmr": data.get("bmr", 0),
+    }
+    print("🧪 färdig rad att skriva (vikt):", rad)
+
+    # Skriv till rätt flik i ditt Google Sheet
     skriv_till_sheet(rad, blad_namn="vikt")
 
+    # Skicka bekräftelse tillbaka
     return jsonify({
         "status": "ok",
-        "message": f"✅ Vikt {vikt} kg loggad för {person} kl. {tid}"
+        "message": f"✅ Vikt loggad för {person}: {vikt} kg"
     }), 200

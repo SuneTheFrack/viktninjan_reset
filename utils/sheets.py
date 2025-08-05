@@ -4,29 +4,48 @@ import json
 from oauth2client.service_account import ServiceAccountCredentials
 
 # == ge rättigheter att läsa och skriva ==
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+scope = [
+    "https://spreadsheets.google.com/feeds",
+    "https://www.googleapis.com/auth/drive"
+]
 
 # == skriv till sheet ==
-def skriv_till_sheet(rad, blad_namn="Logg"):
-    
-    import json  # lägg detta högst upp om det inte finns
-    creds_dict = json.loads(os.environ["SERVICE_ACCOUNT_JSON"])
+def skriv_till_sheet(rad_dict, blad_namn="mat"):
+    print(f"📤 skriver till blad: {blad_namn}")
+    print("🧾 data att logga (dict):", rad_dict)
 
+    # Autentisering
+    creds_dict = json.loads(os.environ["SERVICE_ACCOUNT_JSON"])
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
     client = gspread.authorize(creds)
 
+    # Öppna Google Sheet och blad
     sheet_id = os.environ["SHEET_ID"]
     spreadsheet = client.open_by_key(sheet_id)
-    blad = spreadsheet.worksheet(blad_namn)
+
+    try:
+        blad = spreadsheet.worksheet(blad_namn)
+    except gspread.exceptions.WorksheetNotFound:
+        print(f"❌ Hittar inte bladet '{blad_namn}' – kontrollera fliknamnet i Google Sheet!")
+        raise
+
+    # Hämta kolumnrubriker från första raden
+    kolumnnamn = blad.row_values(1)
+    kolumnnamn = [k.lower() for k in kolumnnamn]
+
+    # Skapa en rad i rätt ordning
+    rad = [rad_dict.get(k, "") for k in kolumnnamn]
+    print("✅ färdig rad att skriva (lista):", rad)
+
     blad.append_row(rad)
 
 # == läs loggar från sheet ==
 def hamta_loggar(person=None, datum=None, typ="mat"):
     blad_namn = {
-        "mat": "Mat",
-        "rorelse": "Rorelse",
-        "vikt": "Vikt"
-    }.get(typ.lower(), "Mat")  # fix: .lower() för att undvika versalproblem
+        "mat": "mat",
+        "rorelse": "rorelse",
+        "vikt": "vikt"
+    }.get(typ.lower(), "mat")
 
     creds_dict = json.loads(os.environ["SERVICE_ACCOUNT_JSON"])
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
@@ -37,9 +56,9 @@ def hamta_loggar(person=None, datum=None, typ="mat"):
 
     filtrerade = []
     for rad in rader:
-        if person and rad["Person"].lower() != person.lower():
+        if person and rad["person"].lower() != person.lower():
             continue
-        if datum and rad["Datum"] != datum:
+        if datum and rad["datum"] != datum:
             continue
         filtrerade.append(rad)
 
@@ -59,6 +78,7 @@ def hamta_preferenser(person):
             return rad
     return None
 
+# == hämta kolumnnamn från ett blad ==
 def hamta_kolumnnamn(blad_namn):
     creds_dict = json.loads(os.environ["SERVICE_ACCOUNT_JSON"])
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
@@ -68,5 +88,5 @@ def hamta_kolumnnamn(blad_namn):
     spreadsheet = client.open_by_key(sheet_id)
     blad = spreadsheet.worksheet(blad_namn)
 
-    kolumnnamn = blad.row_values(1)  # Första raden antas vara header
-    return [k.lower() for k in kolumnnamn]  # Små bokstäver för jämnhet
+    kolumnnamn = blad.row_values(1)
+    return [k.lower() for k in kolumnnamn]

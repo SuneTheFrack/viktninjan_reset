@@ -1,38 +1,40 @@
 from flask import Flask
 from logg_router import logg_allt
-from routes.logg_get import las_loggar
+from routes.logg_get import las_loggar, veckosammanstallning
 from viktlogg import logg_vikt
 from rorelselogg import logg_rorelse
 from routes.preferenser import las_preferenser
 
-print("✅ Flask och imports klara")  # <--- Lägg till
+print("✅ Flask och imports klara")
 
 app = Flask(__name__)
+print("✅ Flask-app initierad")
 
-@app.route('/')
-def home():
-    return "ViktNinjan är igång!", 200
-    
-print("✅ Flask-app initierad")  # <--- Lägg till
-
-# Knyt alla logg-endpoints
+# POST /logg → logga mat, vikt eller rörelse
 app.add_url_rule("/logg", view_func=logg_allt, methods=["POST"])
-print("✅ /logg är registrerad")
+print("✅ /logg (POST) registrerad")
 
-app.add_url_rule("/loggvikt", view_func=logg_vikt, methods=["POST"])
-print("✅ /loggvikt registrerad")  # <--- Lägg till
-
-app.add_url_rule("/loggrorelse", view_func=logg_rorelse, methods=["POST"])
-print("✅ /loggrorelse registrerad")  # <--- Lägg till
-
+# GET /logg → hämta loggar (mat, vikt, rörelse eller all)
 app.add_url_rule("/logg", view_func=las_loggar, methods=["GET"])
 print("✅ /logg (GET) registrerad")
 
+# POST /loggvikt → separat vikt-endpoint (om ni vill)
+app.add_url_rule("/loggvikt", view_func=logg_vikt, methods=["POST"])
+print("✅ /loggvikt registrerad")
 
+# POST /loggrorelse → separat rörelse-endpoint (om ni vill)
+app.add_url_rule("/loggrorelse", view_func=logg_rorelse, methods=["POST"])
+print("✅ /loggrorelse registrerad")
+
+# GET /veckosammanstallning → veckosammanställning
+app.add_url_rule("/veckosammanstallning", view_func=veckosammanstallning, methods=["GET"])
+print("✅ /veckosammanstallning (GET) registrerad")
+
+# GET /preferenser → hämta preferenser
 app.add_url_rule("/preferenser", view_func=las_preferenser, methods=["GET"])
 print("✅ /preferenser (GET) registrerad")
 
 
 if __name__ == "__main__":
-    print("🚀 Startar Flask-server...")  # <--- Lägg till
+    print("🚀 Startar Flask-server...")
     app.run(host="0.0.0.0", port=8000)

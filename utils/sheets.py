@@ -10,6 +10,20 @@ scope = [
 ]
 
 # == skriv till sheet ==
+import gspread
+import os
+import json
+import time
+from oauth2client.service_account import ServiceAccountCredentials
+from gspread.exceptions import APIError
+
+# == ge rättigheter att läsa och skriva ==
+scope = [
+    "https://spreadsheets.google.com/feeds",
+    "https://www.googleapis.com/auth/drive"
+]
+
+# == skriv till sheet ==
 def skriv_till_sheet(rad_dict, blad_namn="mat"):
     print(f"📤 skriver till blad: {blad_namn}")
     print("🧾 data att logga (dict):", rad_dict)
@@ -29,15 +43,29 @@ def skriv_till_sheet(rad_dict, blad_namn="mat"):
         print(f"❌ Hittar inte bladet '{blad_namn}' – kontrollera fliknamnet i Google Sheet!")
         raise
 
-    # Hämta kolumnrubriker från första raden
-    kolumnnamn = blad.row_values(1)
-    kolumnnamn = [k.lower() for k in kolumnnamn]
+    # Hämta kolumnrubriker från första raden och gör dem lowercase
+    kolumnnamn = [k.lower() for k in blad.row_values(1)]
 
-    # Skapa en rad i rätt ordning
+    # Skapa en rad i rätt ordning, fyll tomma med ""
     rad = [rad_dict.get(k, "") for k in kolumnnamn]
     print("✅ färdig rad att skriva (lista):", rad)
 
-    blad.append_row(rad)
+    # Försök append med retry
+    max_retries = 3
+    for attempt in range(1, max_retries + 1):
+        try:
+            blad.append_row(rad)
+            print(f"✅ append lyckades på försök {attempt}")
+            return
+        except APIError as e:
+            print(f"⚠️ APIError vid append (försök {attempt}/{max_retries}): {e}")
+            if attempt < max_retries:
+                time.sleep(1)  # vänta en sekund innan nästa försök
+            else:
+                print("❌ Ger upp – kunde inte skriva till sheet")
+                # Lyft felet så att din route kan returnera ett kontrollerat 500-svar
+                raise
+
 
 # == läs loggar från sheet ==
 def hamta_loggar(person=None, datum=None, typ="mat"):

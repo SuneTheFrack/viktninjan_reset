@@ -21,9 +21,6 @@ print("✅ /logg (POST) registrerad")
 app.add_url_rule("/logg", view_func=las_loggar, methods=["GET"])
 print("✅ /logg (GET) registrerad")
 
-# POST /loggvikt → separat vikt-endpoint (om ni vill)
-app.add_url_rule("/loggrorelse", view_func=logg_rorelse, methods=["POST"])
-print("✅ /loggrorelse registrerad")
 
 
 # POST /loggrorelse → separat rörelse-endpoint (om ni vill)

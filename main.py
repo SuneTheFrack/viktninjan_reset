@@ -5,12 +5,7 @@ from viktlogg import logg_vikt
 from rorelselogg import logg_rorelse
 from routes.preferenser import las_preferenser
 
-import os, time
-from datetime import datetime
 
-print("🔧 TZ-env:", os.getenv("TZ"))
-time.tzset()  # tvingar Python att läsa om TZ
-print("⏰ Nu-tid efter tzset():", datetime.now().strftime("%H:%M"))
 
 print("✅ Flask och imports klara")
 

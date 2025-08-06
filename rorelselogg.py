@@ -1,51 +1,53 @@
-# rorelselogg.py
+# rorelselogg.py  
 # Tar emot rörelsedata och loggar det till fliken "Rorelse" i Google Sheets
 
 from flask import request, jsonify
 from utils.tid import get_datum_tid
 from utils.sheets import skriv_till_sheet
+from gspread.exceptions import APIError
 
 def logg_rorelse():
-    data = request.json
+    # 1) Läs in data och debug-logg
     data = request.get_json()
     print("📥 logg_rorelse körs")
     print("🔍 inkommande data:", data)
 
-    # Hämtar datum och tid, inklusive stöd för "nu"
-    # 1) Datum & tid
-datum, tid = get_datum_tid(data)
+    # 2) Datum & tid (stöd för "nu")
+    datum, tid = get_datum_tid(data)
 
-    # 2) Validera person
+    # 3) Validera person
     person = data.get("person", "")
     if not person:
         return jsonify({"status": "error", "message": "Person saknas"}), 400
 
-    # 3) Hämta rörelsedata (default 0)
-    steg      = data.get("steg", 0)
-    minuter   = data.get("minuter", 0)
-    kalorier  = data.get("kalorier", 0)
+    # 4) Hämta rörelsedata (default 0), stöd både "minuter" och "rorelsetid_min"
+    steg         = data.get("steg", 0)
+    rorelse_min  = data.get("rorelsetid_min", data.get("minuter", 0))
+    kalorier     = data.get("kalorier", 0)
 
-    # 4) Bygg rad-dict
-rad = {
-"datum": datum,
-"tid": tid,
-        "person": data.get("person"),
-        "steg": data.get("steg", ""),
-        "rorelsetid_min": data.get("rorelsetid_min", ""),
-        "kalorier": data.get("kalorier", "")
+    # 5) Bygg rad-dict i exakt samma kolumnordning
+    rad = {
+        "datum": datum,
+        "tid": tid,
         "person": person,
         "steg": steg,
-        "minuter": minuter,
+        "rorelsetid_min": rorelse_min,
         "kalorier": kalorier
-}
+    }
     print("🧪 färdig rad att skriva (rorelse):", rad)
 
-    # 5) Skriv till fliken "rorelse"
-skriv_till_sheet(rad, blad_namn="rorelse")
+    # 6) Skriv till Google Sheet med retry och felhantering
+    try:
+        skriv_till_sheet(rad, blad_namn="rorelse")
+    except APIError as e:
+        print("❌ Kunde inte logga rörelse (APIError):", e)
+        return jsonify({
+            "status": "error",
+            "message": "Kunde inte logga rörelse – försök igen om en stund."
+        }), 500
 
-    # 6) Svara
-return jsonify({
-"status": "ok",
-        "message": f"🏃 Rörelse loggad för {rad['person']}"
-        "message": f"✅ Rörelse loggad för {person}: {steg} steg, {minuter} min, ~{kalorier} kcal"
-}), 200
+    # 7) Returnera framgång
+    return jsonify({
+        "status": "ok",
+        "message": f"✅ Rörelse loggad för {person}: {steg} steg, {rorelse_min} min, ~{kalorier} kcal"
+    }), 200

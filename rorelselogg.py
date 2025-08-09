@@ -31,7 +31,7 @@ def logg_rorelse():
         "tid": tid,
         "person": person,
         "steg": steg,
-        "rorelsetid_min": rorelse_min,
+        "minuter": rorelse_min,
         "kalorier": kalorier
     }
     print("🧪 färdig rad att skriva (rorelse):", rad)

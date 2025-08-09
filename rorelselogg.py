@@ -1,4 +1,4 @@
-# rorelselogg.py  
+# rorelselogg.py 
 # Tar emot rörelsedata och loggar det till fliken "Rorelse" i Google Sheets
 
 from flask import request, jsonify

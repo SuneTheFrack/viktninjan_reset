@@ -22,7 +22,7 @@ def logg_rorelse():
 
     # 4) Hämta rörelsedata (default 0), stöd både "minuter" och "rorelsetid_min"
     steg         = data.get("steg", 0)
-    rorelse_min  = data.get("rorelsetid_min", data.get("minuter", 0))
+    minuter  = data.get("rorelsetid_min", data.get("minuter", 0))
     kalorier     = data.get("kalorier", 0)
 
     # 5) Bygg rad-dict i exakt samma kolumnordning

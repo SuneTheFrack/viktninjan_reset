@@ -33,14 +33,14 @@ def logg_maltid_intern(data):
 
     # 4) bygg rad i exakt samma kolumnordning som "mat"-arket
     #    [datum, tid, person, mal, innehall, kalorier, protein, fett, mattat_fett, kolhydrater, salt, fibrer, vatska_ml]
-    rad = [
+    rad_dict = [
         datum, tid, person, mal, innehall,
         kalorier, protein, fett, mattat_fett,
         kolhydrater, salt, fibrer, vatska_ml
     ]
 
     # 5) skriv raden
-    skriv_till_sheet(rad, "mat")
+    skriv_till_sheet(rad_dict, "mat")
 
     # 6) svar
     return jsonify({

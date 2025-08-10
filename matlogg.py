@@ -7,7 +7,7 @@ datum, tid = get_datum_tid(data)
 person = (data.get("person") or "").strip()
 if not person:
     return jsonify({"status": "error", "message": "person krävs"}), 400
-        return jsonify({"status": "error", "message": "person krävs"}), 400
+    
 # valfritt – snygga till cAsE i arket:
 person = person.capitalize()
 print("📥 logg_maltid_intern körs")

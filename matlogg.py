@@ -40,7 +40,7 @@ def logg_maltid_intern(data):
     ]
 
     # 5) skriv raden
-    skriv_till_sheet("mat", rad)
+    skriv_till_sheet(rad, "mat")
 
     # 6) svar
     return jsonify({

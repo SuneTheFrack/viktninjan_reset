@@ -6,8 +6,6 @@ from rorelselogg import logg_rorelse
 from routes.preferenser import las_preferenser
 
 
-
-
 print("✅ Flask och imports klara")
 
 app = Flask(__name__)
@@ -17,20 +15,16 @@ print("✅ Flask-app initierad")
 app.add_url_rule("/logg", view_func=logg_allt, methods=["POST"])
 print("✅ /logg (POST) registrerad")
 
-# GET /logg → hämta loggar (mat, vikt, rörelse eller all)
-app.add_url_rule("/logg", view_func=las_loggar, methods=["GET"])
-print("✅ /logg (GET) registrerad")
-
-
 
 # POST /loggrorelse → separat rörelse-endpoint (om ni vill)
 app.add_url_rule("/loggrorelse", view_func=logg_rorelse, methods=["POST"])
 print("✅ /loggrorelse registrerad")
 
 
-# GET /preferenser → hämta preferenser
-app.add_url_rule("/preferenser", view_func=las_preferenser, methods=["GET"])
-print("✅ /preferenser (GET) registrerad")
+# POST /preferenser → hämta preferenser via JSON-body
+app.add_url_rule("/preferenser", view_func=las_preferenser, methods=["POST"])
+print("✅ /preferenser (POST) registrerad")
+
 
 
 if __name__ == "__main__":

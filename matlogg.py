@@ -31,33 +31,25 @@ def logg_maltid_intern(data):
     fibrer = _to_float(data.get("fibrer"))
     vatska_ml = _to_float(data.get("vatska_ml"))
 
-    # 4) bygg rad i exakt samma kolumnordning som "mat"-arket
-    #    [datum, tid, person, mal, innehall, kalorier, protein, fett, mattat_fett, kolhydrater, salt, fibrer, vatska_ml]
-    rad_dict = [
-        datum, tid, person, mal, innehall,
-        kalorier, protein, fett, mattat_fett,
-        kolhydrater, salt, fibrer, vatska_ml
-    ]
+        # 4) bygg DICT – nycklarna måste matcha kolumnnamnen i sheetet
+    rad_dict = {
+        "datum": datum,
+        "tid": tid,
+        "person": person,
+        "mal": mal,
+        "innehall": innehall,
+        "kalorier": kalorier,
+        "protein": protein,
+        "fett": fett,
+        "mattat_fett": mattat_fett,
+        "kolhydrater": kolhydrater,
+        "salt": salt,
+        "fibrer": fibrer,
+        "vatska_ml": vatska_ml,
+    }
 
-    # 5) skriv raden
+    # 5) skriv – OBS: dict först, sedan bladnamn
     skriv_till_sheet(rad_dict, "mat")
 
     # 6) svar
-    return jsonify({
-        "status": "ok",
-        "rad": {
-            "datum": datum,
-            "tid": tid,
-            "person": person,
-            "mal": mal,
-            "innehall": innehall,
-            "kalorier": kalorier,
-            "protein": protein,
-            "fett": fett,
-            "mattat_fett": mattat_fett,
-            "kolhydrater": kolhydrater,
-            "salt": salt,
-            "fibrer": fibrer,
-            "vatska_ml": vatska_ml
-        }
-    }), 200
+    return jsonify({"status": "ok", "rad": rad_dict}), 200

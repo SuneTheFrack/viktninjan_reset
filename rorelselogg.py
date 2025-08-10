@@ -27,7 +27,7 @@ def logg_rorelse_intern(data):
     rad = [datum, tid, person, steg, minuter, kalorier]
 
     # 5) skriv till sheet – exakt samma funktion som matlogg använder
-    skriv_till_sheet("rorelse", rad)
+    skriv_till_sheet(rad, "rorelse")
 
     # 6) svar
     return jsonify({

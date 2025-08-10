@@ -11,7 +11,7 @@ def logg_allt():
     vikt = data.get("vikt")
     if isinstance(vikt, (int, float)) and vikt > 0:
         print("📌 Det är en viktlogg")
-        return logg_vikt()
+        return logg_vikt(data)
 
     if "aktivitet" in data or "steg" in data or "minuter" in data:
         print("📌 Det är en rörelselogg")

@@ -23,7 +23,7 @@ print("✅ /loggrorelse registrerad")
 
 # POST /preferenser → hämta preferenser via JSON-body
 app.add_url_rule("/preferenser", view_func=las_preferenser, methods=["POST","GET"])
-print("✅ /preferenser (POST) registrerad")
+print("✅ /preferenser (POST GET) registrerad")
 
 
 
